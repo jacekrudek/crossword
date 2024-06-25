@@ -3,24 +3,78 @@
 
 void Game::initVar()
 {
-	std::vector<std::string> words = {"hello", "whatsup", "lalalal", "ishbjca", "hello", "whatsup", "lalalal", "ishbjca" , "ishbjca" };
+	std::vector<std::string> words = {"hello", "whatsup", "lalalal", "ishbjca", "hello", "whatsup", "lalalal", "ishbjca" , "ishbjca", "ishbjca" };
 
-	active_box = { 0,0 };
+	definitions = {
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+	};
+	if (!font.loadFromFile("lucon.ttf")) {
+		std::cout << "font error";
+	}
+
+	for (int i=0; i < definitions.size(); i++)
+	{
+		sf::Text text;
+		std::string string;
+		string.append(std::to_string(i));
+		string.append(". ");
+		string.append(definitions[i]);
+		text.setString(string);
+		text.setCharacterSize(20);
+		text.setFont(font);
+		def_texts.push_back(text);
+	}
+
+	active_box = { 0,1 };
+
+	logo_texture.loadFromFile("logo.png");
+	logo_sprite.setTexture(logo_texture);
+	logo_sprite.setScale(0.6, 0.6);
+	logo_sprite.setOrigin(logo_texture.getSize().x / 2.0f, logo_texture.getSize().y / 2.0f);
+	logo_sprite.setPosition(800, 50);
 
 	for (int j = 0; j < words.size(); j++)
 	{
 		std::vector<InputField> fieldvec;
-		for (int i = 0; i < words[j].size(); i++)
-		{
-			InputField infield = InputField({ j,i }, words[j][i]);
-			float temp1 = j * 50 + 50;
-			float temp2 = i * 40 + 50;
-			sf::Vector2f infpos = { temp2, temp1 };
-			infield.setpos(infpos);
+		bool firstiter = true;
+		for (int i = 0; i < words[j].size()+1; i++)
+		{	
+			if (firstiter == true)
+			{
+				InputField infield = InputField({ j,i }, words[j][i]);
+				float ypos = j * 50 + 150;
+				float xpos = i * 40 + 250;
+				sf::Vector2f infpos = { xpos, ypos };
+				infield.setpos(infpos);
+
+				char number = static_cast<char>(j + '0');
+				infield.setinputletter(number);
+				firstiter = false;
+				infield.setinactivecolor();
+				fieldvec.push_back(infield);
+				def_texts[j].setPosition(xpos + 450, ypos-17);
+
+				continue;
+			}
+
+			InputField infield = InputField({ j,i }, words[j][i-1]);
+			float ypos = j * 50 + 150;
+			float xpos = i * 40 + 250;
+			sf::Vector2f infpos = { xpos, ypos };
+			infield.setpos(infpos);				
 
 			fieldvec.push_back(infield);			
 		}
-		inputmap[j] = fieldvec;
+		inputmap[j] = fieldvec;		
 	}
 }
 
@@ -48,7 +102,7 @@ void Game::update()
 
 	for (auto& a : inputmap)
 	{
-		for (int i=0;i<a.second.size(); i++)
+		for (int i=1;i<a.second.size(); i++)
 		{
 			if (active_box.first == a.first && active_box.second == i)
 			{
@@ -82,6 +136,13 @@ void Game::render()
 		}
 	}
 
+	for (const auto& def : def_texts)
+	{
+		window->draw(def);
+	}
+
+	window->draw(logo_sprite);
+
 	//Display objects
 	this->window->display();
 }
@@ -111,14 +172,14 @@ void Game::pollEvents()
 				if (active_box.first != 0)
 				{
 					active_box.first--;
-					active_box.second = 0;
+					active_box.second = 1;
 				}
 				break;
 			case sf::Keyboard::Down:
 				if (active_box.first != 9)
 				{
 					active_box.first++;
-					active_box.second = 0;
+					active_box.second = 1;
 				}
 				break;
 			case sf::Keyboard::Right:
@@ -126,7 +187,7 @@ void Game::pollEvents()
 					active_box.second++;
 				break;
 			case sf::Keyboard::Left:
-				if (active_box.second != 0)
+				if (active_box.second != 1)
 					active_box.second--;
 				break;
 			default:

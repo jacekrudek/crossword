@@ -33,5 +33,5 @@ public:
 
 	bool isinputcorrect();
 
-	bool isinput();
+	bool isinput();	
 };
