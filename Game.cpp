@@ -60,7 +60,7 @@ void Game::initVar()
 			{
 				InputField infield = InputField({ j,i }, words[j][i]);
 				float ypos = j * 50 + 150;
-				float xpos = i * 40 + 250;
+				float xpos = i * 40 + 50;
 				sf::Vector2f infpos = { xpos, ypos };
 				infield.setpos(infpos);
 
@@ -69,7 +69,7 @@ void Game::initVar()
 				firstiter = false;
 				infield.setinactivecolor();
 				fieldvec.push_back(infield);
-				def_texts[j].setPosition(xpos + 450, ypos-17);
+				def_texts[j].setPosition(xpos + 500, ypos-17);
 				def_texts_shadow[j].setPosition(def_texts[j].getPosition().x + 2, def_texts[j].getPosition().y + 2);
 
 				continue;
@@ -77,7 +77,7 @@ void Game::initVar()
 
 			InputField infield = InputField({ j,i }, words[j][i-1]);
 			float ypos = j * 50 + 150;
-			float xpos = i * 40 + 250;
+			float xpos = i * 40 + 50;
 			sf::Vector2f infpos = { xpos, ypos };
 			infield.setpos(infpos);				
 
