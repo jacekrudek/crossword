@@ -1,0 +1,9 @@
+﻿  Game.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.39.33519\include\ranges(11): warning STL4038: The contents of <ranges> are available only with C++20 or later.
+C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.39.33519\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+E:\GitHub\crossword\Game.cpp(62,16): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+E:\GitHub\crossword\Game.cpp(63,16): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+E:\GitHub\crossword\Game.cpp(79,15): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+E:\GitHub\crossword\Game.cpp(80,15): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+E:\GitHub\crossword\Game.cpp(175,29): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  crossword.vcxproj -> E:\GitHub\crossword\x64\Debug\crossword.exe
