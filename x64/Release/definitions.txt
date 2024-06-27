@@ -1,10 +1,10 @@
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+A linear and sequential software development methodology.
+The process of restructuring existing code without changing its external behavior.
+A special method used to initialize objects when they are created.
+The process of making a software system available for use.
+A design pattern that restricts the instantiation of a class to one single instance.
+The smallest unit of processing that can be performed in an operating system.
+The process of converting source code into executable code.
+The ability of a system to handle multiple operations or tasks simultaneously.
+An instance of a class.
+A list of tasks or features that need to be addressed in a software project.
