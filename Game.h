@@ -18,6 +18,8 @@ class Game
 	sf::Texture logo_texture;
 	sf::Sprite logo_sprite;
 	sf::Font font;
+	sf::Texture bg_texture;
+	sf::Sprite bg_sprite;
 
 	//pair(vertical, horizontal)
 	std::pair<int, int> active_box;
@@ -28,8 +30,10 @@ class Game
 	//map(which word, pair(which symbol is active, vector of chars))
 	std::map<int, std::vector<InputField>> inputmap;
 
-	std::vector<std::string> definitions;
+	std::vector<std::string> definitions;	
+	std::vector<std::string> words;
 	std::vector<sf::Text> def_texts;
+	std::vector<sf::Text>def_texts_shadow;
 public:
 	Game();
 	~Game();

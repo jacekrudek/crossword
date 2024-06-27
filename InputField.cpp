@@ -35,17 +35,24 @@ void InputField::draw(sf::RenderWindow* window)
 	{
 		sf::Font font;
 		sf::Text letter_displayable;
+		sf::Text letter_displayable_shadow;
 		std::string inputstring{ inputletter };
 		if (!font.loadFromFile("lucon.ttf")) {
 			std::cout << "font error";
 		}
 		letter_displayable.setFont(font);
+		letter_displayable_shadow.setFont(font);
 		letter_displayable.setFillColor(sf::Color::White);
+		letter_displayable_shadow.setFillColor(sf::Color(0, 0, 0, 150));
 		letter_displayable.setCharacterSize(30);
+		letter_displayable_shadow.setCharacterSize(30);
 		letter_displayable.setString(inputstring);
+		letter_displayable_shadow.setString(inputstring);
 		/*sf::FloatRect textbounds = letter_displayable.getLocalBounds();
 		letter_displayable.setOrigin(textbounds.width / 2.0f, textbounds.height / 2.0f);*/
 		letter_displayable.setPosition(position.x-13, position.y-22);
+		letter_displayable_shadow.setPosition(letter_displayable.getPosition().x + 2, letter_displayable.getPosition().y + 2);
+		window->draw(letter_displayable_shadow);
 		window->draw(letter_displayable);
 	}
 	return;

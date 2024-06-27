@@ -3,20 +3,20 @@
 
 void Game::initVar()
 {
-	std::vector<std::string> words = {"hello", "whatsup", "lalalal", "ishbjca", "hello", "whatsup", "lalalal", "ishbjca" , "ishbjca", "ishbjca" };
+	std::ifstream inputFile("words.txt");
+	std::string word;
+	while (std::getline(inputFile, word))
+	{
+		words.push_back(word);
+	}
 
-	definitions = {
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-	};
+	std::ifstream inputFile2("definitions.txt");
+	std::string definition;
+	while (std::getline(inputFile2, definition))
+	{
+		definitions.push_back(definition);
+	}
+	
 	if (!font.loadFromFile("lucon.ttf")) {
 		std::cout << "font error";
 	}
@@ -24,23 +24,31 @@ void Game::initVar()
 	for (int i=0; i < definitions.size(); i++)
 	{
 		sf::Text text;
+		sf::Text shadow;
 		std::string string;
 		string.append(std::to_string(i));
 		string.append(". ");
 		string.append(definitions[i]);
 		text.setString(string);
+		shadow.setString(string);
 		text.setCharacterSize(20);
+		shadow.setCharacterSize(20);
 		text.setFont(font);
+		shadow.setFont(font);
 		def_texts.push_back(text);
+		shadow.setFillColor(sf::Color(0, 0, 0, 200));
+		def_texts_shadow.push_back(shadow);
 	}
 
 	active_box = { 0,1 };
 
-	logo_texture.loadFromFile("logo.png");
+	logo_texture.loadFromFile("straightword.png");
 	logo_sprite.setTexture(logo_texture);
-	logo_sprite.setScale(0.6, 0.6);
 	logo_sprite.setOrigin(logo_texture.getSize().x / 2.0f, logo_texture.getSize().y / 2.0f);
 	logo_sprite.setPosition(800, 50);
+
+	bg_texture.loadFromFile("galaxy.jpg");
+	bg_sprite.setTexture(bg_texture);
 
 	for (int j = 0; j < words.size(); j++)
 	{
@@ -62,6 +70,7 @@ void Game::initVar()
 				infield.setinactivecolor();
 				fieldvec.push_back(infield);
 				def_texts[j].setPosition(xpos + 450, ypos-17);
+				def_texts_shadow[j].setPosition(def_texts[j].getPosition().x + 2, def_texts[j].getPosition().y + 2);
 
 				continue;
 			}
@@ -84,7 +93,7 @@ void Game::initWindow()
 	this->videoMode.height = 900;
 	this->videoMode.width = 1600;
 
-	this->window = new sf::RenderWindow(this->videoMode, "Chadword 1.0", sf::Style::Titlebar | sf::Style::Close);
+	this->window = new sf::RenderWindow(this->videoMode, "straightword 1.0", sf::Style::Titlebar | sf::Style::Close);
 
 	this->window->setFramerateLimit(75);
 }
@@ -126,6 +135,8 @@ void Game::render()
 	//Clear current frame
 	this->window->clear();
 
+	window->draw(bg_sprite);
+
 	//get mouse position (temporary)
 	/*sf::Vector2i mousePosition = sf::Mouse::getPosition(*window);
 	std::cout << "Mouse Position: " << mousePosition.x << ", " << mousePosition.y << std::endl;*/
@@ -134,6 +145,11 @@ void Game::render()
 		for (auto second_instance : first_instance.second) {
 			second_instance.draw(window);
 		}
+	}
+
+	for (const auto& def : def_texts_shadow)
+	{
+		window->draw(def);
 	}
 
 	for (const auto& def : def_texts)
@@ -152,6 +168,13 @@ void Game::pollEvents()
 {
 	bool moved = false;
 
+	auto it = inputmap.find(active_box.first);
+	int wordsize;
+	if (it != inputmap.end())
+	{
+		wordsize = it->second.size();
+	}
+
 	while (this->window->pollEvent(this->event))
 	{
 		if (this->event.type == sf::Event::Closed)
@@ -159,13 +182,7 @@ void Game::pollEvents()
 			window->close();
 		}
 		if (this->event.type == sf::Event::KeyPressed)
-		{
-			auto it = inputmap.find(active_box.first);
-			int wordsize;
-			if (it != inputmap.end())
-			{
-				wordsize = it->second.size();
-			}
+		{			
 			switch (event.key.code)
 			{
 			case sf::Keyboard::Up:
@@ -190,13 +207,25 @@ void Game::pollEvents()
 				if (active_box.second != 1)
 					active_box.second--;
 				break;
+			case sf::Keyboard::BackSpace:
+				for (auto& a : inputmap)
+				{
+					for (int i = 0; i < a.second.size(); i++)
+					{
+						if (active_box.first == a.first && active_box.second == i)
+						{
+							a.second[i].setinputletter(' ');
+						}
+					}
+				}
+				break;
 			default:
 				break;
 			}
 		}
 		else if (event.type == sf::Event::TextEntered)
 		{
-			if (event.text.unicode < 128) {
+			if (event.text.unicode < 128 && event.text.unicode != 8) {
 				char enteredChar = static_cast<char>(event.text.unicode);
 
 				for (auto& a : inputmap)
@@ -209,7 +238,13 @@ void Game::pollEvents()
 						}
 					}
 				}
-
+				if (active_box.second < wordsize - 1)
+					active_box.second++;
+				else if (active_box.first != 9)
+				{
+					active_box.first++;
+					active_box.second = 1;
+				}
 			}
 		}
 	}
